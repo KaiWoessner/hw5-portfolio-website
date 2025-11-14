@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Form with JS</title>
+</head>
+<style>
+    :root {
+        /* Light Mode Colors */
+        --background-color: #f5f5f5;
+        --text-color: #2c2c2c;
+        --button-color: #92f4fd;
+        --border-color: #000000;
+        --button-text-color: #000000;
+        --field-background-color: #ffffff;
+    
+        /* Font */
+        --font-family: 'Arial, sans-serif';
+    }
+
+    /* Dark Mode Colors */
+    body:has(#theme-btn.dark-mode) {
+        --button-hover-color: #2acab7; 
+        --background-color: #121212; 
+        --text-color: #e0e0e0;         
+        --button-color: #36a8ff;     
+        --border-color: #ffffff; 
+        --field-background-color: #373636;    
+    }
+
+    body {
+        font-style: var(--font-family);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color);
+        margin: auto;
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    #theme-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    #contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 500px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    form div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    input, textarea, button {
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        background-color: var(--field-background-color);
+        
+    }
+
+    button {
+        background-color: var(--button-color);
+        color: var(--button-text-color);
+        cursor: pointer;
+    }
+
+    output {
+        display: block;
+        padding: 0.5rem;
+    }
+
+    .error {
+        color: red;
+    }
+    .info {
+        color: blue;
+    }
+
+    .flash{
+        background-color: rgb(255, 122, 122);
+    }
+
+    #info-message {
+        opacity: 0;             
+        transition: opacity 0.5s ease;
+    }
+
+    #info-message.show {
+        opacity: 1;             
+    }
+
+    #error-message {
+        opacity: 0;             
+        transition: opacity 0.5s ease;
+    }
+
+    #error-message.show {
+        opacity: 1;             
+    }
+
+    #char-counter {
+        font-size: 0.9rem;
+        color: green;
+        margin-top: 0.25rem;
+    }
+
+    textarea.warning {
+        background-color: #ffdaa7;
+    }
+      
+    textarea.strong-warning {
+        background-color: #fb8484;
+    }
+
+
+</style>
+<body>
+    <!-- Theme Button -->
+    <button id="theme-btn">Light Mode</button>
+
+    <section id="contact-form">
+        <h1>Contact Form</h1>
+        <form action="https://httpbin.org/post" method="POST" novalidate>
+            <!-- Name -->
+            <div id="name-field">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" 
+                    placeholder="Ex: John Doe" required autofocus pattern="^[A-Za-z' \-]+$"maxlength="50">
+            </div>
+        
+            <!-- Email -->
+            <div id="email-field">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" 
+                placeholder="Ex: johndoe@gmail.com" required maxlength="80" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
+            </div>
+
+            <!-- Comments -->
+            <div id="comments-field">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" 
+                required maxlength="60"></textarea>
+                <span id="char-counter">60 characters left</span>
+            </div>
+
+            <!-- Form Errors -->
+            <input type="hidden" name="form-errors" id="form-errors">
+
+            <input type="hidden" name="possible_bot" value="true">
+            
+            <button type="submit">Submit</button>
+
+            <output id="error-message" class="error"></output>
+            <output id="info-message" class="info"></output>
+
+        </form> 
+    </section>
+
+    <!-- JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', init);
+
+        function init() {
+            // Create document objects
+            const nameField = document.querySelector('#name');
+            const emailField = document.querySelector('#email');
+            const textField = document.querySelector('#comments');
+            const errorMessage = document.querySelector('#error-message');
+            const infoMessage = document.querySelector('#info-message');
+
+            // Get form error objects
+            const form = document.querySelector('form');
+            const formErrorsField = document.querySelector('#form-errors');
+            let form_errors = [];
+            
+            // Function to check name field validity
+            function nameValidity() {
+                // Check if required field is filled
+                if (nameField.validity.valueMissing) {
+                    // Required field not filled
+                    nameField.setCustomValidity("Required field");
+                    return 2;
+                }
+
+                // Check if name field is valid
+                if (nameField.validity.patternMismatch) {
+                    nameField.setCustomValidity("Pattern field");
+                    infoMessage.textContent = "";
+                    errorMessage.textContent = "Illegal character! Only letters, spaces, apostrophes, and hyphens allowed.";
+
+                    // Name error
+                    const error = {
+                        type: 'name',
+                        value: nameField.value,
+                        reason: 'Input contains illegal characters'
+                    };
+                    form_errors.push(error);
+
+                    // Flash the name field
+                    nameField.classList.add('flash');
+                    setTimeout(() => nameField.classList.remove('flash'), 200);
+
+                
+                    // Fade out error message after 2 seconds
+                    errorMessage.classList.add('show');
+                    setTimeout(() => errorMessage.classList.remove('show'), 3000);
+                    
+                    // Set erorrs to form_errors array
+                    formErrorsField.value = JSON.stringify(form_errors);
+                    nameField.setCustomValidity("Name can only contain letters, spaces, apostrophes, and hyphens.");
+                    return 1;
+                }
+                nameField.setCustomValidity("");
+                return 0;
+            }; 
+
+            // Function to check email field validity
+            function emailValidity() {
+                // Check if required field is filled
+                if (emailField.validity.valueMissing) {
+                    // Required field not filled
+                    emailField.setCustomValidity("Required field");
+                    return 2;
+                }
+
+                // Check if email field is valid
+                if (emailField.validity.patternMismatch) {
+                    infoMessage.textContent = "";
+                    errorMessage.textContent = "Invalid email! Please enter a valid email address.";
+
+                    // Email error
+                    const error = {
+                        type: 'email',
+                        value: emailField.value,
+                        reason: 'Email format is incorrect/invalid'
+                    };
+                    form_errors.push(error);
+
+                    // Flash the name field
+                    emailField.classList.add('flash');
+                    setTimeout(() => emailField.classList.remove('flash'), 200);
+
+                
+                    // Fade out error message after 2 seconds
+                    errorMessage.classList.add('show');
+                    setTimeout(() => errorMessage.classList.remove('show'), 3000);
+                    
+                    // Set erorrs to form_errors array
+                    formErrorsField.value = JSON.stringify(form_errors);
+                    emailField.setCustomValidity("Invalid email format");
+                    return 1;
+                }
+                emailField.setCustomValidity("");
+                return 0;
+            };
+
+            // Function to check email field validity
+            function commentValidity() {
+                if (textField.validity.valueMissing) {
+                    textField.setCustomValidity("Required field");
+                    return 2;
+                }
+                textField.setCustomValidity("");
+                return 0;
+            };
+
+    
+            // Function to check validity after every character
+            nameField.addEventListener('input', nameValidity);
+
+
+            // Character counter for textarea
+            const counter = document.getElementById('char-counter');
+            const maxLength = textField.getAttribute('maxlength');
+            
+            textField.addEventListener('input', () => {
+                const remaining = maxLength - textField.value.length;
+                counter.textContent = `${remaining} characters left`;
+
+                // Remove both classes before checking warnings
+                textField.classList.remove('warning', 'strong-warning');
+            
+                // Warning stages
+                if (remaining <= 10) {
+                    textField.classList.add('strong-warning');
+                    counter.style.color = 'red';
+                } else if (remaining <= 20) {
+                    textField.classList.add('warning');
+                    counter.style.color = 'orange';
+                } else {
+                    counter.style.color = 'green';
+                }
+            });
+
+            // Form submission validation
+            form.addEventListener('submit', (e) => {
+
+                const nameResponse= nameValidity();
+                const emailResponse = emailValidity();
+                const commentResponse = commentValidity();
+
+                if (nameResponse !== 0 || emailResponse !== 0 || commentResponse !== 0) {
+                    // Dont submit the form
+                    e.preventDefault();
+
+                    // Trigger custom validation messages
+                    form.reportValidity();
+                }
+
+                const missingFields = [];
+                if (nameResponse === 2) missingFields.push("Name");
+                if (emailResponse === 2) missingFields.push("Email");
+                if (commentResponse === 2) missingFields.push("Comments");
+            
+                // Add info message for missing fields
+                if (missingFields.length > 0) {
+                    // Fade out error message after 2 seconds
+                    infoMessage.textContent = `Please fill in the following required fields: ${missingFields.join(", ")}`;
+                    infoMessage.classList.add('show');
+                    setTimeout(() => infoMessage.classList.remove('show'), 3000);
+                }
+            });
+
+            // Theme Toggle
+            const themeBtn = document.getElementById('theme-btn');
+
+            // Load saved theme from localStorage
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                themeBtn.classList.toggle('dark-mode');
+                themeBtn.textContent = 'Light Mode';
+            } 
+            else {
+                themeBtn.textContent = 'Dark Mode';
+            }
+
+            // Toggle theme on button click
+            themeBtn.addEventListener('click', () => {
+                themeBtn.classList.toggle('dark-mode');
+                if (themeBtn.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeBtn.textContent = 'Light Mode';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeBtn.textContent = 'Dark Mode';
+                }
+            });
+
+            
+        };
+    </script>
+    <noscript>
+        <style>
+            #theme-btn { display: none; }
+        </style>
+    </noscript>
+</body>

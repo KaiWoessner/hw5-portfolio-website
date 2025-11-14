@@ -22,8 +22,19 @@
     --font-heading: 'Roboto', 'Helvetica Neue, sans-serif';
 }
 
+/* View Transition */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-new(main-content) {
+    animation: slideRight 0.7s forwards;
+}
+
+@keyframes slideRight { from {transform: translateX(100%);} to {transform: translateX(0);} }
+
 /* Fade in Animation */
-@keyframes cardFadeIn {
+/* @keyframes cardFadeIn {
     0% {
         opacity: 0;
         transform: translateY(20px); 
@@ -32,7 +43,7 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
+} */
 idv-project, idv-experience {
     animation: cardFadeIn 1s ease;
 }
@@ -94,6 +105,7 @@ header {
     border-bottom: 1px solid var(--bar-border-color);
     box-sizing: border-box;
     padding: .25em .5em;
+    z-index: 1000;
 
     #settings-button {
         background: none;
@@ -200,6 +212,7 @@ header {
 
 /* ===== About Section ===== */
 #about-section {
+    view-transition-name: main-content;
     padding-left: 2.5rem;
     margin-left: calc(160px + 2rem);
 
@@ -220,6 +233,7 @@ header {
 
 /* ===== Project Section ===== */
 #project-section{
+    view-transition-name: main-content;
     padding-left: 2.5rem;
     margin-left: calc(160px + 2rem);
     margin-bottom: 2rem;
@@ -288,6 +302,7 @@ header {
 
 /* ===== Experience Section ===== */
 #experience-section{
+    view-transition-name: main-content;
     padding-left: 2.5rem;
     margin-left: calc(160px + 2rem);
     margin-bottom: 2rem;
