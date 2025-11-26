@@ -8,6 +8,108 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <script>
+        class ProjectCard extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+    
+            connectedCallback() {
+            const title = this.getAttribute('title') || '';
+            const image = this.getAttribute('image') || '';
+            const imageSmall = this.getAttribute('image-small') || '';
+            const alt = this.getAttribute('alt') || '';
+            const skills = this.getAttribute('skills') || '';
+            const description = this.getAttribute('description') || '';
+            const link = this.getAttribute('link') || '#';
+    
+            // Directly insert HTML and CSS here
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :root {
+                        --dark-color: #2C3E50;  
+                        --button-hover-color: color(display-p3 0.59 0.89 0.83);    
+                        --text-hover-color: color-mix(in srgb, var(--text-color) 20%, #04715b 80%);
+                        --background-color: #f5f5f5;
+                        --bar-color: #dcdcdc;
+                        --bar-border-color: #ccc;
+                        --text-color: #2c2c2c;
+                        --button-color: #f3f3f3;
+                        --border-color: #000000;
+                        --shadow-color: rgba(0,0,0,0.2);
+                        --heading-font-size: 2rem;
+                        --medium-font-size: 1.5rem;
+                        --text-font-size: 1rem;
+
+                        --font-family: 'Roboto', 'Arial, sans-serif';
+                        --font-heading: 'Roboto', 'Helvetica Neue, sans-serif';
+                    }
+                    .card {
+                        display: flex;
+                        flex-direction: column;
+                        width: 90%;
+                        max-width: 700px;
+                        background-color: var(--bar-color);
+                        border: 1px solid var(--border-color);
+                        border-radius: 12px;
+                        padding: 1.5rem;
+                        box-shadow: 0 5px 20px var(--shadow-color);
+                    }
+
+                    .card h2 {
+                        font-size: var(--medium-font-size);
+                        margin: 0 0 1rem 0;
+                    }
+
+                    .card img {
+                        width: 100%;
+                        border-radius: 8px;
+                        margin-bottom: 1rem;
+                        border: 1px solid var(--border-color);
+                    }
+
+                    .card p {
+                        font-size: 1rem;
+                        line-height: 1.6;
+                        margin-bottom: 1rem;
+                        text-align: justify;
+                        max-width: 100%;
+                    }
+
+                    .card .skills {
+                        text-align: left;
+                    }
+
+                    .card a {
+                        color: var(--text--color);
+                        text-decoration: none;
+                        word-break: break-all;
+                    }
+
+                    .card a:hover {
+                        color: var(--text-hover-color);
+                        transition: color 0.2s ease;
+                    }
+                </style>
+                <div class="card">
+                    <h2>${title}</h2>
+                    <picture>
+                        <source srcset="${imageSmall}" media="(max-width: 900px)">
+                        <img src="${image}" alt="${alt}">
+                    </picture>
+                    <p><b>Skills:</b> ${skills}</p>
+                    <p><b>Description:</b> ${description}</p>
+                    <a href="${link}" target="_blank"><b>Link:</b> ${link}</a>
+                    </div>
+                </div>
+            `;
+            }
+        }
+    
+        customElements.define('project-card', ProjectCard);
+    </script>
+
     <!-- top bar with gear and navigation -->
     <header>
         <!-- Settings button -->
@@ -71,59 +173,41 @@
             <h1>Projects</h1>
             <ul>
                 <li>
-                    <!-- Project 1 -->
-                    <idv-project>
-                        <h2>Cartoon Converter</h2>
-                        <!-- Project image -->
-                        <picture>
-                            <source srcset="resources/cartoon-converter/cartoon-converter-1000x574.jpg" media="(max-width: 900px)">
-                            <img src="resources/cartoon-converter/cartoon-converter-1500x861.png" alt="Picture of cartoon converter webpage converting Chicago Board of Trade building">
-                        </picture>  
-                    
-                        <!-- Project skills -->
-                        <p class="skills"> <b>Skills</b>: React, Flask, OpenCV, DevTools </p>
-                
-                        <!-- Project Description -->
-                        <p>
-                            Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into
-                            cartoonized versions. Implemented a dynsamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding,
-                            morphological operations, bilateral filtering, and bitwise maskin
-                        </p>
-
-                        <!-- Link to Project -->
-                        <p> 
-                            <b>Project link</b>:
-                            <a href="https://github.com/KaiWoessner/CartoonConverter">https://github.com/KaiWoessner/CartoonConverter</a>
-                        </p>
-                    </idv-project>
+                    <project-card
+                      title="AztecPlanner"
+                      image="resources/aztec-planner/aztec-planner-2908x1456.jpg"
+                      image-small="resources/aztec-planner/aztec-planner-1500x751.jpg"
+                      alt="Degree planner dashboard showing student info, unit progress, course history, search bar, and AI assistant"
+                      skills="React, Vite, Tailwind, FastAPI, ChromaDB, LiteLLM, Beautiful Soup, Selenium"
+                      description="Lightning-fast React application built with Vite for instant hot-module replacement and optimized production builds. Handles dynamic user interactions, degree audit parsing, and real-time semester planning with a responsive, intuitive interface. Styled with Tailwind CSS and featuring interactive data visualizations powered by Recharts. Features ChromaDB integration for semantic course search and intelligent recommendations, LiteLLM endpoints enabling multi-model AI assistance, and Retrieval-Augmented Generation system combining vector search with language models for context-aware academic advising."
+                      link="https://github.com/tristanmcooper/AztecPlanner">
+                    </project-card>
                 </li>
+
                 <li>
-                    <!-- Project 2 -->
-                    <idv-project>
-                        <h2>Dev Journal</h2>
-                        <!-- Project image -->
-                        <picture>
-                            <source srcset="resources/dev-journal/dev-journal-1000x548.png" media="(max-width: 900px)">
-                            <img src="resources/dev-journal/dev-journal-1500x822.png" alt="Picture of Dev Journal homepage">
-                        </picture>  
-                
-                        <!-- Project skills -->
-                        <p class="skills"> <b>Skills</b>: HTML, CSS, JS, LocalStorage, DevTools, Github Actions, Puppeteer, Agile </p>
-                
-                        <!-- Project Description -->
-                        <p>
-                            Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code
-                            quality checks to ensure reliable website deployments. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives, to manage project development
-                        </p>
-
-                        <!-- Link to Project -->
-                        <p> 
-                            <b>Project link</b>:
-                            <a href="https://github.com/cse110-sp24-group25/Developer-Journal">https://github.com/cse110-sp24-group25/Developer-Journal</a>
-                        </p>
-                    </idv-project>
+                    <project-card
+                        title="Cartoon Converter"
+                        image="resources/cartoon-converter/cartoon-converter-1500x861.png"
+                        image-small="resources/cartoon-converter/cartoon-converter-1000x574.jpg"
+                        alt="Cartoonizer app converting Chicago Board of Trade building photo into a cartoon-styled version with edge adjustment sliders"
+                        skills="React, Flask, OpenCV, DevTools"
+                        description="Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into cartoonized versions. Implemented a dynamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding, morphological operations, bilateral filtering, and bitwise masking."
+                        link="https://github.com/KaiWoessner/CartoonConverter">
+                    </project-card>
                 </li>
-            </ul>
+            
+                <li>
+                    <project-card
+                        title="Dev Journal"
+                        image="resources/dev-journal/dev-journal-1500x822.png"
+                        image-small="resources/dev-journal/dev-journal-1000x548.png"
+                        alt="Dev Journal app dashboard showing task list, mood tracker, productivity tracker, and past activity log"
+                        skills="HTML, CSS, JS, LocalStorage, DevTools, Github Actions, Puppeteer, Agile"
+                        description="Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code quality checks. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives."
+                        link="https://github.com/cse110-sp24-group25/Developer-Journal">
+                    </project-card>
+                </li>
+              </ul>
         </section>
       </main>
   
@@ -145,8 +229,6 @@
 
         <button popovertarget="settings-dialog" popovertargetaction="hide">Close</button>
     </dialog>
-
-    <hello-world></hello-world>
   
     <noscript>
       <p><em>Note:</em> JavaScript is disabled — interactive features are unavailable.</p>
