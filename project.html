@@ -8,107 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <script>
-        class ProjectCard extends HTMLElement {
-            constructor() {
-                super();
-                this.attachShadow({ mode: 'open' });
-            }
-    
-            connectedCallback() {
-            const title = this.getAttribute('title') || '';
-            const image = this.getAttribute('image') || '';
-            const imageSmall = this.getAttribute('image-small') || '';
-            const alt = this.getAttribute('alt') || '';
-            const skills = this.getAttribute('skills') || '';
-            const description = this.getAttribute('description') || '';
-            const link = this.getAttribute('link') || '#';
-    
-            // Directly insert HTML and CSS here
-            this.shadowRoot.innerHTML = `
-                <style>
-                    :root {
-                        --dark-color: #2C3E50;  
-                        --button-hover-color: color(display-p3 0.59 0.89 0.83);    
-                        --text-hover-color: color-mix(in srgb, var(--text-color) 20%, #04715b 80%);
-                        --background-color: #f5f5f5;
-                        --bar-color: #dcdcdc;
-                        --bar-border-color: #ccc;
-                        --text-color: #2c2c2c;
-                        --button-color: #f3f3f3;
-                        --border-color: #000000;
-                        --shadow-color: rgba(0,0,0,0.2);
-                        --heading-font-size: 2rem;
-                        --medium-font-size: 1.5rem;
-                        --text-font-size: 1rem;
-
-                        --font-family: 'Roboto', 'Arial, sans-serif';
-                        --font-heading: 'Roboto', 'Helvetica Neue, sans-serif';
-                    }
-                    .card {
-                        display: flex;
-                        flex-direction: column;
-                        width: 90%;
-                        max-width: 700px;
-                        background-color: var(--bar-color);
-                        border: 1px solid var(--border-color);
-                        border-radius: 12px;
-                        padding: 1.5rem;
-                        box-shadow: 0 5px 20px var(--shadow-color);
-                    }
-
-                    .card h2 {
-                        font-size: var(--medium-font-size);
-                        margin: 0 0 1rem 0;
-                    }
-
-                    .card img {
-                        width: 100%;
-                        border-radius: 8px;
-                        margin-bottom: 1rem;
-                        border: 1px solid var(--border-color);
-                    }
-
-                    .card p {
-                        font-size: 1rem;
-                        line-height: 1.6;
-                        margin-bottom: 1rem;
-                        text-align: justify;
-                        max-width: 100%;
-                    }
-
-                    .card .skills {
-                        text-align: left;
-                    }
-
-                    .card a {
-                        color: var(--text--color);
-                        text-decoration: none;
-                        word-break: break-all;
-                    }
-
-                    .card a:hover {
-                        color: var(--text-hover-color);
-                        transition: color 0.2s ease;
-                    }
-                </style>
-                <div class="card">
-                    <h2>${title}</h2>
-                    <picture>
-                        <source srcset="${imageSmall}" media="(max-width: 900px)">
-                        <img src="${image}" alt="${alt}">
-                    </picture>
-                    <p><b>Skills:</b> ${skills}</p>
-                    <p><b>Description:</b> ${description}</p>
-                    <a href="${link}" target="_blank"><b>Link:</b> ${link}</a>
-                    </div>
-                </div>
-            `;
-            }
-        }
-    
-        customElements.define('project-card', ProjectCard);
-    </script>
 
     <!-- top bar with gear and navigation -->
     <header>
@@ -170,44 +69,15 @@
 
         <!-- List of projects -->
         <section id="project-section">
-            <h1>Projects</h1>
-            <ul>
-                <li>
-                    <project-card
-                      title="AztecPlanner"
-                      image="resources/aztec-planner/aztec-planner-2908x1456.jpg"
-                      image-small="resources/aztec-planner/aztec-planner-1500x751.jpg"
-                      alt="Degree planner dashboard showing student info, unit progress, course history, search bar, and AI assistant"
-                      skills="React, Vite, Tailwind, FastAPI, ChromaDB, LiteLLM, Beautiful Soup, Selenium"
-                      description="Lightning-fast React application built with Vite for instant hot-module replacement and optimized production builds. Handles dynamic user interactions, degree audit parsing, and real-time semester planning with a responsive, intuitive interface. Styled with Tailwind CSS and featuring interactive data visualizations powered by Recharts. Features ChromaDB integration for semantic course search and intelligent recommendations, LiteLLM endpoints enabling multi-model AI assistance, and Retrieval-Augmented Generation system combining vector search with language models for context-aware academic advising."
-                      link="https://github.com/tristanmcooper/AztecPlanner">
-                    </project-card>
-                </li>
+            <div id="project-header">
+                <h1>Projects</h1>
+                <div id="storage-buttons">
+                    <button id="load-local">Load Local</button>
+                    <button id="load-remote">Load Remote</button>
+                </div>
+            </div>
 
-                <li>
-                    <project-card
-                        title="Cartoon Converter"
-                        image="resources/cartoon-converter/cartoon-converter-1500x861.png"
-                        image-small="resources/cartoon-converter/cartoon-converter-1000x574.jpg"
-                        alt="Cartoonizer app converting Chicago Board of Trade building photo into a cartoon-styled version with edge adjustment sliders"
-                        skills="React, Flask, OpenCV, DevTools"
-                        description="Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into cartoonized versions. Implemented a dynamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding, morphological operations, bilateral filtering, and bitwise masking."
-                        link="https://github.com/KaiWoessner/CartoonConverter">
-                    </project-card>
-                </li>
-            
-                <li>
-                    <project-card
-                        title="Dev Journal"
-                        image="resources/dev-journal/dev-journal-1500x822.png"
-                        image-small="resources/dev-journal/dev-journal-1000x548.png"
-                        alt="Dev Journal app dashboard showing task list, mood tracker, productivity tracker, and past activity log"
-                        skills="HTML, CSS, JS, LocalStorage, DevTools, Github Actions, Puppeteer, Agile"
-                        description="Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code quality checks. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives."
-                        link="https://github.com/cse110-sp24-group25/Developer-Journal">
-                    </project-card>
-                </li>
-              </ul>
+            <slot id="project-container"></slot>
         </section>
       </main>
   
@@ -229,6 +99,211 @@
 
         <button popovertarget="settings-dialog" popovertargetaction="hide">Close</button>
     </dialog>
+
+    <script>
+        // Get project data from JSONBin
+        async function fetchProjects() {
+            const res = await fetch("https://api.jsonbin.io/v3/b/69278690d0ea881f40024b33/latest", {
+              headers: {
+                "X-Master-Key": "$2a$10$BDP6g3oiIozClCcOCjYqt.cTnqybdTvVoRTQvqlZWwtkCB/J4XYSO"
+              }
+            });
+          
+            const data = await res.json();
+            return data.record;
+          }
+
+        // Create project-card custom element
+        class ProjectCard extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+    
+            connectedCallback() {
+                const title = this.getAttribute('title') || '';
+                const image = this.getAttribute('image') || '';
+                const imageSmall = this.getAttribute('image-small') || '';
+                const alt = this.getAttribute('alt') || '';
+                const skills = this.getAttribute('skills') || '';
+                const description = this.getAttribute('description') || '';
+                const link = this.getAttribute('link') || '#';
+        
+                // Directly insert HTML and CSS here
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        :root {
+                            --dark-color: #2C3E50;  
+                            --button-hover-color: color(display-p3 0.59 0.89 0.83);    
+                            --text-hover-color: color-mix(in srgb, var(--text-color) 20%, #04715b 80%);
+                            --background-color: #f5f5f5;
+                            --bar-color: #dcdcdc;
+                            --bar-border-color: #ccc;
+                            --text-color: #2c2c2c;
+                            --button-color: #f3f3f3;
+                            --border-color: #000000;
+                            --shadow-color: rgba(0,0,0,0.2);
+                            --heading-font-size: 2rem;
+                            --medium-font-size: 1.5rem;
+                            --text-font-size: 1rem;
+
+                            --font-family: 'Roboto', 'Arial, sans-serif';
+                            --font-heading: 'Roboto', 'Helvetica Neue, sans-serif';
+                        }
+                        .card {
+                            display: flex;
+                            flex-direction: column;
+                            width: 90%;
+                            max-width: 700px;
+                            background-color: var(--bar-color);
+                            border: 1px solid var(--border-color);
+                            border-radius: 12px;
+                            padding: 1.5rem;
+                            margin: 0 0 1rem 0;
+                            box-shadow: 0 5px 20px var(--shadow-color);
+                        }
+
+                        .card h2 {
+                            font-size: var(--medium-font-size);
+                            margin: 0 0 1rem 0;
+                        }
+
+                        .card img {
+                            width: 100%;
+                            border-radius: 8px;
+                            margin-bottom: 1rem;
+                            border: 1px solid var(--border-color);
+                        }
+
+                        .card p {
+                            font-size: 1rem;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                            text-align: justify;
+                            max-width: 100%;
+                        }
+
+                        .card .skills {
+                            text-align: left;
+                        }
+
+                        .card a {
+                            color: var(--text--color);
+                            text-decoration: none;
+                            word-break: break-all;
+                        }
+
+                        .card a:hover {
+                            color: var(--text-hover-color);
+                            transition: color 0.2s ease;
+                        }
+                    </style>
+                    <div class="card">
+                        <h2>${title}</h2>
+                        <picture>
+                            <source srcset="${imageSmall}" media="(max-width: 900px)">
+                            <img src="${image}" alt="${alt}">
+                        </picture>
+                        <p><b>Skills:</b> ${skills}</p>
+                        <p><b>Description:</b> ${description}</p>
+                        <a href="${link}" target="_blank"><b>Link:</b> ${link}</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('project-card', ProjectCard);
+
+        // Fetch data and populate project cards
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.querySelector('#project-container');
+            const loadLocalButton = document.getElementById('load-local');
+            const loadRemoteButton = document.getElementById('load-remote');
+
+            const projectData = [{
+                "title": "Dev Journal",
+                "image": "resources/dev-journal/dev-journal-1500x822.png",
+                "imageSmall": "resources/dev-journal/dev-journal-1000x548.png",
+                "alt": "Dev Journal app dashboard showing task list, mood tracker, productivity tracker, and past activity log",
+                "skills": ["HTML", "CSS", "JS", "LocalStorage", "DevTools", "Github Actions", "Puppeteer", "Agile"],
+                "description": "Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code quality checks. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives.",
+                "link": "https://github.com/cse110-sp24-group25/Developer-Journal"
+                },
+                {
+                "title": "AztecPlanner",
+                "image": "resources/aztec-planner/aztec-planner-2908x1456.jpg",
+                "imageSmall": "resources/aztec-planner/aztec-planner-1500x751.jpg",
+                "alt": "Degree planner dashboard showing student info, unit progress, course history, search bar, and AI assistant",
+                "skills": ["React", "Vite", "Tailwind", "FastAPI", "ChromaDB", "LiteLLM", "Beautiful Soup", "Selenium"],
+                "description": "Lightning-fast React application built with Vite for instant hot-module replacement and optimized production builds. Handles dynamic user interactions, degree audit parsing, and real-time semester planning with a responsive, intuitive interface. Styled with Tailwind CSS and featuring interactive data visualizations powered by Recharts. Features ChromaDB integration for semantic course search and intelligent recommendations, LiteLLM endpoints enabling multi-model AI assistance, and Retrieval-Augmented Generation system combining vector search with language models for context-aware academic advising.",
+                "link": "https://github.com/tristanmcooper/AztecPlanner"
+                },
+                {
+                "title": "Cartoon Converter",
+                "image": "resources/cartoon-converter/cartoon-converter-1500x861.png",
+                "imageSmall": "resources/cartoon-converter/cartoon-converter-1000x574.jpg",
+                "alt": "Cartoonizer app converting Chicago Board of Trade building photo into a cartoon-styled version with edge adjustment sliders",
+                "skills": ["React", "Flask", "OpenCV", "DevTools"],
+                "description": "Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into cartoonized versions. Implemented a dynamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding, morphological operations, bilateral filtering, and bitwise masking.",
+                "link": "https://github.com/KaiWoessner/CartoonConverter"
+            }]
+            // Add project json to local storage
+            localStorage.setItem('project-data', JSON.stringify(projectData));
+
+            // Fetch projects from local storage
+            function loadLocalProjects() {
+                container.innerHTML = '';
+            
+                const projectData = localStorage.getItem('project-data');
+                const projects = JSON.parse(projectData);
+            
+                projects.forEach(proj => {
+                    const card = document.createElement('project-card');
+            
+                    card.setAttribute('title', proj.title);
+                    card.setAttribute('image', proj.image);
+                    card.setAttribute('image-small', proj.imageSmall);
+                    card.setAttribute('alt', proj.alt);
+                    card.setAttribute('skills', proj.skills);
+                    card.setAttribute('description', proj.description);
+                    card.setAttribute('link', proj.link);
+            
+                    container.appendChild(card);
+                });
+            }
+    
+            // Fetch projects from JSONBin
+            async function loadRemoteProjects() {
+                container.innerHTML = '';
+            
+                const res = await fetch("https://api.jsonbin.io/v3/b/69278690d0ea881f40024b33/latest", {
+                    headers: {
+                        "X-Master-Key": "$2a$10$BDP6g3oiIozClCcOCjYqt.cTnqybdTvVoRTQvqlZWwtkCB/J4XYSO"
+                    }
+                });
+                const data = await res.json();
+                const projects = data.record;
+        
+                projects.forEach(proj => {
+                    const card = document.createElement('project-card');
+        
+                    card.setAttribute('title', proj.title);
+                    card.setAttribute('image', proj.image);
+                    card.setAttribute('image-small', proj.imageSmall);
+                    card.setAttribute('alt', proj.alt);
+                    card.setAttribute('skills', proj.skills);
+                    card.setAttribute('description', proj.description);
+                    card.setAttribute('link', proj.link);
+        
+                    container.appendChild(card);
+                });
+            }
+
+            loadLocalButton.addEventListener('click', loadLocalProjects);
+            loadRemoteButton.addEventListener('click', loadRemoteProjects);
+        });
+
+    </script>
   
     <noscript>
       <p><em>Note:</em> JavaScript is disabled — interactive features are unavailable.</p>

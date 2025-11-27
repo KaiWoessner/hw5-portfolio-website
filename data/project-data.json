@@ -1,0 +1,29 @@
+[
+    {
+      "title": "AztecPlanner",
+      "image": "resources/aztec-planner/aztec-planner-2908x1456.jpg",
+      "imageSmall": "resources/aztec-planner/aztec-planner-1500x751.jpg",
+      "alt": "Degree planner dashboard showing student info, unit progress, course history, search bar, and AI assistant",
+      "skills": ["React", "Vite", "Tailwind", "FastAPI", "ChromaDB", "LiteLLM", "Beautiful Soup", "Selenium"],
+      "description": "Lightning-fast React application built with Vite for instant hot-module replacement and optimized production builds. Handles dynamic user interactions, degree audit parsing, and real-time semester planning with a responsive, intuitive interface. Styled with Tailwind CSS and featuring interactive data visualizations powered by Recharts. Features ChromaDB integration for semantic course search and intelligent recommendations, LiteLLM endpoints enabling multi-model AI assistance, and Retrieval-Augmented Generation system combining vector search with language models for context-aware academic advising.",
+      "link": "https://github.com/tristanmcooper/AztecPlanner"
+    },
+    {
+      "title": "Cartoon Converter",
+      "image": "resources/cartoon-converter/cartoon-converter-1500x861.png",
+      "imageSmall": "resources/cartoon-converter/cartoon-converter-1000x574.jpg",
+      "alt": "Cartoonizer app converting Chicago Board of Trade building photo into a cartoon-styled version with edge adjustment sliders",
+      "skills": ["React", "Flask", "OpenCV", "DevTools"],
+      "description": "Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into cartoonized versions. Implemented a dynamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding, morphological operations, bilateral filtering, and bitwise masking.",
+      "link": "https://github.com/KaiWoessner/CartoonConverter"
+    },
+    {
+      "title": "Dev Journal",
+      "image": "resources/dev-journal/dev-journal-1500x822.png",
+      "imageSmall": "resources/dev-journal/dev-journal-1000x548.png",
+      "alt": "Dev Journal app dashboard showing task list, mood tracker, productivity tracker, and past activity log",
+      "skills": ["HTML", "CSS", "JS", "LocalStorage", "DevTools", "Github Actions", "Puppeteer", "Agile"],
+      "description": "Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code quality checks. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives.",
+      "link": "https://github.com/cse110-sp24-group25/Developer-Journal"
+    }
+]
