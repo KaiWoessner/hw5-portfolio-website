@@ -72,8 +72,9 @@
             <div id="project-header">
                 <h1>Projects</h1>
                 <div id="storage-buttons">
+                    <button id="new-project-btn">New Project</button>
                     <button id="load-local">Load Local</button>
-                    <button id="load-remote">Load Remote</button>
+                    <!-- <button id="load-remote">Load Remote</button> -->
                 </div>
             </div>
 
@@ -85,6 +86,38 @@
     <footer>
       <p>&copy; <span>2025</span> Kainoa Woessner</p>
     </footer>
+
+    <!-- Project dialog -->
+    <dialog id="project-dialog">
+        <h2>New Project</h2>
+        <form id="project-form" method="dialog">
+            <label>Title:<br>
+                <input type="text" id="project-title" name="title" required>
+            </label><br><br>
+    
+            <label>Image URL:<br>
+                <input type="text" id="project-image" name="image" required>
+            </label><br><br>
+    
+            <label>Alt Text:<br>
+                <input type="text" id="project-alt" name="alt">
+            </label><br><br>
+    
+            <label>Skills (separate with comma):<br>
+                <input type="text" id="project-skills" name="skills">
+            </label><br><br>
+    
+            <label>Description:<br>
+                <textarea id="project-description" rows="4" name="description"></textarea>
+            </label><br><br>
+    
+            <label>Link:<br>
+                <input type="text" id="project-link" name="link">
+            </label><br><br>
+    
+            <button id="save-project-btn">Save Project</button>
+        </form>
+    </dialog>
   
     <!-- Settings dialog -->
     <dialog id="settings-dialog" popover>
@@ -101,6 +134,8 @@
     </dialog>
 
     <script>
+        let currentEditingCard = null;
+
         // Get project data from JSONBin
         async function fetchProjects() {
             const res = await fetch("https://api.jsonbin.io/v3/b/69278690d0ea881f40024b33/latest", {
@@ -197,6 +232,22 @@
                             color: var(--text-hover-color);
                             transition: color 0.2s ease;
                         }
+
+                        .delete-btn, .edit-btn {
+                            color: var(--text-color);
+                            background-color: var(--button-color);
+                            border: 1px solid var(--border-color);
+                            border-radius: 5px;
+                            padding: .5em;
+                            margin: 1em 0 0em 0;
+                            font-size: 1em;
+                            cursor: pointer;
+                            transition: background-color 0.4s;
+                        }
+
+                        .delete-btn:hover, .edit-btn:hover {
+                            background-color: var(--button-hover-color);
+                        }
                     </style>
                     <div class="card">
                         <h2>${title}</h2>
@@ -207,9 +258,42 @@
                         <p><b>Skills:</b> ${skills}</p>
                         <p><b>Description:</b> ${description}</p>
                         <a href="${link}" target="_blank"><b>Link:</b> ${link}</a>
-                        </div>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
                     </div>
                 `;
+
+                // Delete card
+                const deleteBtn = this.shadowRoot.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', () => {
+                    this.remove();
+
+                    // Remove this project from localStorage
+                    const projectData = JSON.parse(localStorage.getItem('crud-data')) || [];
+                    const filtered = projectData.filter(proj =>
+                        proj.title !== title || proj.description !== description
+                    );
+                    localStorage.setItem('crud-data', JSON.stringify(filtered));
+                });
+
+                // Edit card
+                const editBtn = this.shadowRoot.querySelector('.edit-btn');
+                editBtn.addEventListener('click', () => {
+                    const dialog = document.getElementById('project-dialog');
+                    const form = document.getElementById('project-form');
+
+                    currentEditingCard = this;
+        
+                    // Populate form with current project info
+                    form.title.value = title;
+                    form.image.value = image;
+                    form.alt.value = alt;
+                    form.skills.value = skills;
+                    form.description.value = description;
+                    form.link.value = link;
+        
+                    dialog.showModal();
+                });
             }
         }
         customElements.define('project-card', ProjectCard);
@@ -217,47 +301,25 @@
         // Fetch data and populate project cards
         document.addEventListener('DOMContentLoaded', async () => {
             const container = document.querySelector('#project-container');
+            const newProjectBtn = document.getElementById('new-project-btn');
+            const dialog = document.getElementById('project-dialog');
+            const saveBtn = document.getElementById('save-project-btn');
+            const cancelBtn = document.getElementById('cancel-project-btn');
             const loadLocalButton = document.getElementById('load-local');
-            const loadRemoteButton = document.getElementById('load-remote');
 
-            const projectData = [{
-                "title": "Dev Journal",
-                "image": "resources/dev-journal/dev-journal-1500x822.png",
-                "imageSmall": "resources/dev-journal/dev-journal-1000x548.png",
-                "alt": "Dev Journal app dashboard showing task list, mood tracker, productivity tracker, and past activity log",
-                "skills": "HTML, CSS, JS, LocalStorage, DevTools, Github Actions, Puppeteer, Agile",
-                "description": "Developed a local-first journaling website using HTML, CSS, and Javascript that includes features for task management, mood and productivity tracking, and past activity reviewing. Formed a CI/CD pipeline with Jest and GitHub Actions that automates unit testing, end-to-end testing, and code quality checks. Employed Agile methodologies, including sprints, daily stand-ups, and retrospectives.",
-                "link": "https://github.com/cse110-sp24-group25/Developer-Journal"
-                },
-                {
-                "title": "AztecPlanner",
-                "image": "resources/aztec-planner/aztec-planner-2908x1456.jpg",
-                "imageSmall": "resources/aztec-planner/aztec-planner-1500x751.jpg",
-                "alt": "Degree planner dashboard showing student info, unit progress, course history, search bar, and AI assistant",
-                "skills": "React, Vite, Tailwind, FastAPI, ChromaDB, LiteLLM, Beautiful Soup, Selenium",
-                "description": "Lightning-fast React application built with Vite for instant hot-module replacement and optimized production builds. Handles dynamic user interactions, degree audit parsing, and real-time semester planning with a responsive, intuitive interface. Styled with Tailwind CSS and featuring interactive data visualizations powered by Recharts. Features ChromaDB integration for semantic course search and intelligent recommendations, LiteLLM endpoints enabling multi-model AI assistance, and Retrieval-Augmented Generation system combining vector search with language models for context-aware academic advising.",
-                "link": "https://github.com/tristanmcooper/AztecPlanner"
-                },
-                {
-                "title": "Cartoon Converter",
-                "image": "resources/cartoon-converter/cartoon-converter-1500x861.png",
-                "imageSmall": "resources/cartoon-converter/cartoon-converter-1000x574.jpg",
-                "alt": "Cartoonizer app converting Chicago Board of Trade building photo into a cartoon-styled version with edge adjustment sliders",
-                "skills": "React, Flask, OpenCV, DevTools",
-                "description": "Developed a full-stack image processing web app using React, Flask, and OpenCV to convert user-uploaded images into cartoonized versions. Implemented a dynamic pipeline triggered by slider updates to apply grayscale conversion, adaptive thresholding, morphological operations, bilateral filtering, and bitwise masking.",
-                "link": "https://github.com/KaiWoessner/CartoonConverter"
-            }]
-            // Add project json to local storage
-            localStorage.setItem('project-data', JSON.stringify(projectData));
+            // Initialize crud-data if empty
+            if (!localStorage.getItem('crud-data')) {
+                localStorage.setItem('crud-data', JSON.stringify([]));
+            }
 
             // Fetch projects from local storage
-            function loadLocalProjects() {
+            function loadProjects() {
                 container.innerHTML = '';
             
-                const projectData = localStorage.getItem('project-data');
+                const projectData = localStorage.getItem('crud-data');
                 const projects = JSON.parse(projectData);
             
-                projects.forEach(proj => {
+                projects.forEach((proj, index) => {
                     const card = document.createElement('project-card');
             
                     card.setAttribute('title', proj.title);
@@ -268,39 +330,75 @@
                     card.setAttribute('description', proj.description);
                     card.setAttribute('link', proj.link);
             
-                    container.appendChild(card);
-                });
-            }
-    
-            // Fetch projects from JSONBin
-            async function loadRemoteProjects() {
-                container.innerHTML = '';
-            
-                const res = await fetch("https://api.jsonbin.io/v3/b/69278690d0ea881f40024b33/latest", {
-                    headers: {
-                        "X-Master-Key": "$2a$10$BDP6g3oiIozClCcOCjYqt.cTnqybdTvVoRTQvqlZWwtkCB/J4XYSO"
-                    }
-                });
-                const data = await res.json();
-                const projects = data.record;
-        
-                projects.forEach(proj => {
-                    const card = document.createElement('project-card');
-        
-                    card.setAttribute('title', proj.title);
-                    card.setAttribute('image', proj.image);
-                    card.setAttribute('image-small', proj.imageSmall);
-                    card.setAttribute('alt', proj.alt);
-                    card.setAttribute('skills', proj.skills);
-                    card.setAttribute('description', proj.description);
-                    card.setAttribute('link', proj.link);
-        
                     container.appendChild(card);
                 });
             }
 
-            loadLocalButton.addEventListener('click', loadLocalProjects);
-            loadRemoteButton.addEventListener('click', loadRemoteProjects);
+            // Create new project
+            function newProject(e) {
+                e.preventDefault();
+
+                const form = document.getElementById('project-form');
+                const dialog = document.getElementById('project-dialog');
+            
+                const projectData = JSON.parse(localStorage.getItem('crud-data')) || [];
+            
+                const newProj = {
+                    title: form.title.value,
+                    image: form.image.value,
+                    imageSmall: form.image.value,
+                    alt: form.alt.value,
+                    skills: form.skills.value,
+                    description: form.description.value,
+                    link: form.link.value
+                };
+            
+                // Editing old project
+                if (currentEditingCard) {
+                    const oldTitle = currentEditingCard.getAttribute('title');
+                    const oldDescription = currentEditingCard.getAttribute('description');
+            
+                    const index = projectData.findIndex(proj =>
+                        proj.title === oldTitle && proj.description === oldDescription
+                    );
+            
+                    // Update crud data
+                    projectData[index] = newProj;
+                    localStorage.setItem('crud-data', JSON.stringify(projectData));
+            
+                    // Update card
+                    currentEditingCard.setAttribute('title', newProj.title);
+                    currentEditingCard.setAttribute('image', newProj.image);
+                    currentEditingCard.setAttribute('image-small', newProj.imageSmall);
+                    currentEditingCard.setAttribute('alt', newProj.alt);
+                    currentEditingCard.setAttribute('skills', newProj.skills);
+                    currentEditingCard.setAttribute('description', newProj.description);
+                    currentEditingCard.setAttribute('link', newProj.link);
+            
+                    currentEditingCard = null;
+                } 
+                // New project
+                else {
+                    projectData.push(newProj);
+                    localStorage.setItem('crud-data', JSON.stringify(projectData));
+                }
+
+                loadProjects();
+            
+                dialog.close();
+                form.reset();
+            };
+
+            // Load projects from local storage
+            loadLocalButton.addEventListener('click', loadProjects);
+
+            // Add new project
+            saveBtn.addEventListener('click', newProject);
+
+            // Open new project dialog
+            newProjectBtn.addEventListener('click', () => {
+                dialog.showModal();
+            });
         });
 
     </script>
