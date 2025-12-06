@@ -67,46 +67,30 @@
 
         <!-- Experience list -->
         <section id="experience-section">
-            <h1>Experience</h1>
-            <ul>
-                <li>
-                    <!-- Experience 1 -->
-                    <idv-experience>
-                        <h2>Research and Development Intern - Allez Health</h2>
-                        <!-- Experience image -->
-                        <picture>
-                            <source srcset="resources/allez-health-logo/allez-health-logo-400x406.png" media="(max-width: 600px)">
-                            <img src="resources/allez-health-logo/allez-health-logo-558x566.png" alt="Allez Health logo">
-                        </picture>  
-                        <!-- Experience description -->
-                        <p>
-                            Developed Python programs that automate large-scale CGM data processing in order to analyze sensor trends and identify performance improvements
-                            Optimized existing software by identifying bottlenecks and implemented multithreading to reduce runtime by up to
-                            50x. Analyzed processed data to identify manufacturing factors impacting electrode performance and worked on developing
-                            a machine learning model to predict sensor sensitivity from calibration metrics and electrode measurements. Performed electrochemical tests such as enzyme testing, electropolymerization testing, open circuit potential (OCP),
-                            and linear sweep voltammetry (LSV), to generate datasets for sensor performance evaluation
-                        </p>
-                    </idv-experience>
-                </li>
-        
-                <li>
-                    <!-- Experience 2 -->
-                    <idv-experience>
-                        <h2>Technical Lead - UCSD Project in a Box</h2>
-                        <!-- Experience image -->
-                        <picture>
-                            <img src="resources/pib-logo/pib-logo.png" alt="Project in a Box logo">
-                        </picture>  
-                        <!-- Experience description -->
-                        <p>
-                            Managed task distribution and coordinated project inventory to develop an Arduino football game using IR sensors and
-                            laser-cut components. Authored comprehensive documentation and step-by-step assembly guides, enabling the project to be replicated in
-                            future organization workshops. Contributed to community outreach through workshops specialized for elementary student
-                        </p>
-                    </idv-experience>
-                </li>
-            </ul>
-        </section>
+          <h1>Experience</h1>
+      
+          <experience-card
+              title="Research and Development Intern – Allez Health"
+              image="resources/allez-health-logo/allez-health-logo-558x566.png"
+              image-small="resources/allez-health-logo/allez-health-logo-400x406.png"
+              alt="Allez Health logo"
+              description="Developed Python programs that automate large-scale CGM data processing in order to analyze sensor trends and identify performance improvements. Optimized existing software by identifying bottlenecks and implemented multithreading to reduce runtime by up to
+              50x. Analyzed processed data to identify manufacturing factors impacting electrode performance and worked on developing
+              a machine learning model to predict sensor sensitivity from calibration metrics and electrode measurements. Performed electrochemical tests such as enzyme testing, electropolymerization testing, open circuit potential (OCP),
+              and linear sweep voltammetry (LSV), to generate datasets for sensor performance evaluation.">
+          </experience-card>
+      
+          <experience-card
+              title="Technical Lead – UCSD Project in a Box"
+              image="resources/pib-logo/pib-logo.png"
+              image-small="resources/pib-logo/pib-logo.png"
+              alt="Project in a Box logo"
+              description="Managed task distribution and coordinated project inventory to develop an Arduino football game using IR sensors and
+              laser-cut components. Authored comprehensive documentation and step-by-step assembly guides, enabling the project to be replicated in
+              future organization workshops. Contributed to community outreach through workshops specialized for elementary students.">
+          </experience-card>
+      
+      </section>
     </main>
   
     <!-- Footer -->
@@ -131,5 +115,91 @@
     <noscript>
       <p><em>Note:</em> JavaScript is disabled — interactive features are unavailable.</p>
     </noscript>
+
+    <script>
+        class ExperienceCard extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+        
+            connectedCallback() {
+                const title = this.getAttribute('title') || '';
+                const image = this.getAttribute('image') || '';
+                const imageSmall = this.getAttribute('image-small') || '';
+                const alt = this.getAttribute('alt') || '';
+                const description = this.getAttribute('description') || '';
+        
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        :root {
+                            --dark-color: #2C3E50;  
+                            --button-hover-color: color(display-p3 0.59 0.89 0.83);    
+                            --text-hover-color: color-mix(in srgb, var(--text-color) 20%, #04715b 80%);
+                            --background-color: #f5f5f5;
+                            --bar-color: #dcdcdc;
+                            --bar-border-color: #ccc;
+                            --text-color: #2c2c2c;
+                            --button-color: #f3f3f3;
+                            --border-color: #000000;
+                            --shadow-color: rgba(0,0,0,0.2);
+                            --heading-font-size: 2rem;
+                            --medium-font-size: 1.5rem;
+                            --text-font-size: 1rem;
+
+                            --font-family: 'Roboto', 'Arial, sans-serif';
+                            --font-heading: 'Roboto', 'Helvetica Neue, sans-serif';
+                        }
+        
+                        .card {
+                            display: flex;
+                            flex-direction: column;
+                            width: 90%;
+                            max-width: 500px;
+                            background-color: var(--bar-color);
+                            border: 1px solid var(--border-color);
+                            border-radius: 12px;
+                            padding: 1.5rem;
+                            margin: 0 0 1rem 0;
+                            box-shadow: 0 5px 20px var(--shadow-color);
+                        }
+        
+                        .card h2 {
+                            font-size: var(--medium-font-size);
+                            margin-bottom: 1rem;
+                        }
+        
+                        .card img {
+                            width: 50%;
+                            border-radius: 8px;
+                            display: block;
+                            margin: 0 auto 1rem auto;
+                            border: 1px solid var(--border-color);
+                        }
+        
+                        .card p {
+                            font-size: var(--text-font-size);
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                            text-align: justify;
+                        }
+                    </style>
+        
+                    <div class="card">
+                        <h2>${title}</h2>
+        
+                        <picture>
+                            <source srcset="${imageSmall}" media="(max-width: 900px)">
+                            <img src="${image}" alt="${alt}">
+                        </picture>
+        
+                        <p>${description}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        customElements.define('experience-card', ExperienceCard);
+      </script>
   </body>
 </html>
