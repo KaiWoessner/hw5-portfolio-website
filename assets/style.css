@@ -16,6 +16,7 @@
     --heading-font-size: 2rem;
     --medium-font-size: 1.5rem;
     --text-font-size: 1rem;
+    --shadow-color: rgba(0,0,0,0.2);
 
     /* Fonts */
     --font-family: 'Roboto', 'Arial, sans-serif';
@@ -251,6 +252,14 @@ header {
     padding-left: 2.5rem;
     margin-left: calc(160px + 2rem);
     margin-bottom: 2rem;
+
+    .cards-container {
+        display: flex;
+        flex-direction: column; /* one per row */
+        gap: 2rem;              /* spacing between cards */
+        width: 100%;
+        align-items: center;     /* center cards horizontally */
+    }
 }
 
 /* ===== Footer ===== */
